@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -32,11 +33,13 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = false;
         }
     }
-
+    
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.CompareTag("Spike"))
         {
              Destroy(rb.gameObject);
+             Time.timeScale=0;
         }
     }
+    
 }
