@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public Vector3 jump;
     public float jumpForce = 2.0f;
+    public Animator animator;
   
     private Rigidbody2D rb;
      public bool isGrounded;
@@ -29,8 +30,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
+            animator.SetBool("Jump",true);
             rb.velocity = new Vector2(rb.velocity.x,jumpForce);
+           
             isGrounded = false;
+            
+        }
+        if(isGrounded == true){
+        animator.SetBool("Jump",false);
         }
     }
     
