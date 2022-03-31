@@ -13,11 +13,15 @@ public class PlayerMovement : MonoBehaviour
      public bool isGrounded;
     private BoxCollider2D coll;
     float distToGround;
+
+    public AudioSource jumpSound;
+    public AudioSource deathSound;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         jump = new Vector3(0.0f,2.0f,0.0f);
         coll = GetComponent<BoxCollider2D>();
+        
         
     }
     void OnCollisionStay2D()
@@ -31,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             animator.SetBool("Jump",true);
+            jumpSound.Play();
+            
             rb.velocity = new Vector2(rb.velocity.x,jumpForce);
            
             isGrounded = false;
@@ -38,14 +44,23 @@ public class PlayerMovement : MonoBehaviour
         }
         if(isGrounded == true){
         animator.SetBool("Jump",false);
+        
         }
     }
-    
+     IEnumerator ExecuteAfterTime(float time)
+ {
+     yield return new WaitForSeconds(time);
+ 
+             
+             Destroy(rb.gameObject);
+             
+ }
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.CompareTag("Spike"))
-        {
-             Destroy(rb.gameObject);
-             Time.timeScale=0;
+        {    Time.timeScale=0;
+           deathSound.Play();
+          
+            StartCoroutine(ExecuteAfterTime(2));
         }
     }
     
