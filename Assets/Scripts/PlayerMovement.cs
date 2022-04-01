@@ -16,30 +16,36 @@ public class PlayerMovement : MonoBehaviour
 
     public AudioSource jumpSound;
     public AudioSource deathSound;
+
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         jump = new Vector3(0.0f,2.0f,0.0f);
         coll = GetComponent<BoxCollider2D>();
+        isGrounded=true;
         
         
     }
-    void OnCollisionStay2D()
-         {
-             isGrounded = true;
-         }
+    // void OnCollisionStay2D()
+    //      {
+    //          isGrounded = true;
+    //      }
 
     // Update is called once per frame
     void Update()
-    {
+    {   isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             animator.SetBool("Jump",true);
             jumpSound.Play();
-            
+            // isGrounded = false;
             rb.velocity = new Vector2(rb.velocity.x,jumpForce);
            
-            isGrounded = false;
+            
             
         }
         if(isGrounded == true){
@@ -63,5 +69,7 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(ExecuteAfterTime(2));
         }
     }
+
+    
     
 }
